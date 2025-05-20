@@ -2,6 +2,29 @@
 
 This directory contains examples of drone simulations using the Genesis framework.
 
+## PID controller (`pid_env.py`, `pid_eval.py`, `pid_train.py`)
+The hover environment (`pid_env.py`) is designed to train multiple drones to reach randomly generated target points stably through LLM-generated way-point planning and fine-tuned PID control. 
+
+### Run the simulation (`pid_eval.py`)
+The simulation state (state of the environment (target points and their tracked states) and drones' state parameters) at each step is saved in .json files:
+- "step": Current simulation step number.
+- "targets": List of target point coordinates, one per drone.
+- "completed": Boolean list indicating whether each target has been reached.
+- "drone_states": List of per-drone states, each containing:
+    - "drone_id": ID of the drone.
+    - "step": Current step number.
+    - "target": Assigned target coordinates.
+    - "position": Current drone position [x, y, z].
+    - "velocity": Linear velocity vector [vx, vy, vz].
+    - "attitude": Drone orientation [roll, pitch, yaw] in degrees.
+    - "pid_params": Current PID gains used by the controller (9 groups of [P, I, D]).
+    - "rpms": Commanded RPMs for the four propellers.
+
+Run with:
+```bash
+python pid_eval.py --n_drones 3 # number of drones == number of targets
+```
+
 ## Available Examples
 
 ### 1. Interactive Drone (`interactive_drone.py`)

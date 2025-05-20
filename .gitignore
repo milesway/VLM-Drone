@@ -7,6 +7,10 @@ sftp-config.json
 *.mp4
 genesis/assets/terrain/
 
+# videos
+examples/drone/
+*.mp4
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
