@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser()
     # parser.add_argument("--record", action="store_true", help="Enable video recording.")
     parser.add_argument("--video_save_path", type=str, default="./videos/pid_flight.mp4")
+    parser.add_argument("--picture_save_path", type=str, default="./pictures/")
     parser.add_argument("--state_params_save_path", type=str, default="./logs/multi_drone_flight")
     parser.add_argument(
         "--pid_params",
@@ -48,11 +49,16 @@ def main():
         show_viewer=True,
         snapshots=args.snapshots,
         snap_interval=args.snap_interval,
+        picture_save_path=args.picture_save_path,
+        video_save_path=args.video_save_path,
+        state_params_save_path=args.state_params_save_path
     )
 
+    # Just run
     env.run(
-        save_video_path=args.video_save_path,
-        state_params_save_path=args.state_params_save_path
+        # save_video_path=args.video_save_path,
+        # state_params_save_path=args.state_params_save_path,
+        # picture_save_path=args.picture_save_path
     )
 
 

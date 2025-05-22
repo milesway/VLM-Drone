@@ -2,13 +2,23 @@ import os
 import json
 import numpy as np
 import genesis as gs
+import cv2
 from scipy.spatial.distance import cdist
 from genesis.engine.entities.drone_entity import DroneEntity
 from quadcopter_controller import DronePIDController
 
 
 class PidEnv:
-    def __init__(self, target_trajectory, pid_params=None, n_drones=1, show_viewer=True, snapshots=True, snap_interval=100):
+    def __init__(self, target_trajectory, 
+                 pid_params=None,
+                 n_drones=1, 
+                 show_viewer=True, 
+                 snapshots=True, 
+                 snap_interval=100,
+                 picture_save_path=None, 
+                 video_save_path=None, 
+                 state_params_save_path=None):
+
         self.base_rpm = 14468.429183500699
         self.min_rpm = 0.9 * self.base_rpm
         self.max_rpm = 1.5 * self.base_rpm
@@ -18,7 +28,11 @@ class PidEnv:
         # self.record = record
         self.snapshots = snapshots
         self.snap_interval = snap_interval
-
+        
+        # For saving pictures and videos
+        self.picture_save_path = picture_save_path
+        self.video_save_path = video_save_path
+        self.state_params_save_path = state_params_save_path
         gs.init(backend=gs.gpu) # Scene initialized
 
         self.scene = gs.Scene(
@@ -113,7 +127,7 @@ class PidEnv:
     def clamp(self, rpm):
         return max(self.min_rpm, min(int(rpm), self.max_rpm))
     
-    def fly_to_point(self, state_params_save_path=None, max_steps=10000, margin=0.1):
+    def fly_to_point(self, state_params_save_path=None, picture_save_path=None, max_steps=10000, margin=0.1):
        
         os.makedirs(state_params_save_path, exist_ok=True)
         # bool complete[# targets] stores the state of the target points be reached (True) of not (False)
@@ -168,16 +182,24 @@ class PidEnv:
             # TO DO: Call LLM API to input way-points based on current drone state
             
             self.scene.step()
-            self.cam.render()
+            # self.cam.render()
+            
+            
             
             # Use genesis feature to take picture with cam and save fig
-            if self.snapshots and step % self.snap_interval == 0:
-                # self.cam.save_image(os.path.join(state_params_save_path, f"snapshot_{step:04d}.png"))
-                pass
+            # if self.snapshots and step % self.snap_interval == 0:
+            if self.snapshots:
+                rgb, depth, segmentation, normal = self.cam.render(rgb=True, depth=True, segmentation=True, normal=True)
+                # Convert RGB to BGR for saving
+                bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(os.path.join(picture_save_path, f"snapshot_{step:04d}.png"), bgr)
+
+                # cv2.imwrite(os.path.join(picture_save_path, f"snapshot_{step:04d}.png"), rgb)   
+                # print(f"Picture saved to: {os.path.join(picture_save_path, f'snapshot_{step:04d}.png')}")
             
             step += 1
 
-    def run(self, save_video_path=None, state_params_save_path=None):
+    def run(self):
         
         self.cam.start_recording()
 
@@ -185,8 +207,8 @@ class PidEnv:
             self.target_markers[i].set_pos(point)
         
         # Execute the drones to fly to the current set of target points
-        self.fly_to_point(state_params_save_path=state_params_save_path)
+        self.fly_to_point(state_params_save_path=self.state_params_save_path, picture_save_path=self.picture_save_path)
 
         
-        self.cam.stop_recording(save_to_filename=save_video_path or "../videos/pid_flight.mp4")
-        print(f"Video saved to: {save_video_path}")
+        self.cam.stop_recording(save_to_filename=self.video_save_path or "../videos/pid_flight.mp4")
+        print(f"Video saved to: {self.video_save_path}")
