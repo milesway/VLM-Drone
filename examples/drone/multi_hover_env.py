@@ -218,6 +218,15 @@ class MultiHoverEnv:
                 bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
                 cv2.imwrite(os.path.join(self.picture_save_path, f"snapshot_{step:04d}.png"), bgr)
 
+            def openai_api_call(self, picture_path):
+                # Use OpenAI API to analyze the picture
+                pass
+            
+            # Use OpenAI API to analyze the picture
+            openai_api_call(os.path.join(self.picture_save_path, f"snapshot_{step:04d}.png"))
+            
+            #################### pre-step ####################
+            # TO DO: Call LLM API to input way-points based on current drone state
             self.scene.step()
             step += 1
 
