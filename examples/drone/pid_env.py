@@ -249,6 +249,13 @@ class PidEnv:
                 # cv2.imwrite(os.path.join(picture_save_path, f"snapshot_{step:04d}.png"), rgb)   
                 # print(f"Picture saved to: {os.path.join(picture_save_path, f'snapshot_{step:04d}.png')}")
             
+            def openai_api_call(self, picture_path):
+                # Use OpenAI API to analyze the picture
+                pass
+            
+            # Use OpenAI API to analyze the picture
+            openai_api_call(os.path.join(picture_save_path, f"snapshot_{step:04d}.png"))
+        
             step += 1
 
         # Save the number of steps taken (time elapsed)
