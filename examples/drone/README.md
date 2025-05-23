@@ -2,6 +2,12 @@
 
 This directory contains examples of drone simulations using the Genesis framework.
 
+## Run the trained RL algorithm for MultiDrone, LLM planned Simulation
+Put the `cfgs.pkl` and `model_500.pt` checkpoints under `drone/logs/drone-demo`
+```bash
+python multi_hover_eval.py --n_drones 3 --ckpt 500 --exp_name drone-demo
+```
+
 ## PID controller (`pid_env.py`, `pid_eval.py`, `pid_train.py`)
 The hover environment (`pid_env.py`) is designed to train multiple drones to reach randomly generated target points stably through LLM-generated way-point planning and fine-tuned PID control. 
 
@@ -23,6 +29,12 @@ The simulation state (state of the environment (target points and their tracked 
 Run with:
 ```bash
 python pid_eval.py --n_drones 3 # number of drones == number of targets
+```
+
+## Run the trained RL algorithm for demonstration (https://github.com/KafuuChikai/GenesisDroneEnv.git)
+Put the `cfgs.pkl` and `model_500.pt` checkpoints under `drone/logs/drone-demo`
+ ```bash
+ python hover_eval.py -e drone-demo --ckpt 500 --record
 ```
 
 ## Available Examples

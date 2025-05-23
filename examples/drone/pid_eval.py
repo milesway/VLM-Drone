@@ -4,6 +4,11 @@ import os
 import random
 from pid_env import PidEnv
 
+from rsl_rl.runners import OnPolicyRunner
+import torch
+import pickle
+import genesis as gs
+
 def generate_random_targets(n, x_range, y_range, z_range):
     " Generate n random targets "
     return [
@@ -40,6 +45,16 @@ def main():
     pid_params = json.loads(args.pid_params) if args.pid_params else None 
     
     os.makedirs(args.state_params_save_path, exist_ok=True)
+    
+    # # Load trained RL policy
+    # log_dir = "logs/drone-demo"
+    # env_cfg, obs_cfg, reward_cfg, command_cfg, train_cfg = pickle.load(
+    #     open(os.path.join(log_dir, "cfgs.pkl"), "rb")
+    # )
+    # runner = OnPolicyRunner(None, train_cfg, log_dir, device=gs.device)
+    # runner.load(os.path.join(log_dir, "model_300.pt"))
+    # policy = runner.get_inference_policy(device=gs.device)
+    # policy.eval()
 
     # Save the parameters in a .json file for each time step
     env = PidEnv(
@@ -51,7 +66,12 @@ def main():
         snap_interval=args.snap_interval,
         picture_save_path=args.picture_save_path,
         video_save_path=args.video_save_path,
-        state_params_save_path=args.state_params_save_path
+        state_params_save_path=args.state_params_save_path,
+        
+        rl_pkl_path="logs/drone-demo",
+        control_mode="rl",
+        # policy=policy,
+        # device=gs.device,
     )
 
     # Just run
