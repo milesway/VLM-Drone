@@ -87,7 +87,9 @@ class MultiHoverEnv:
 
     def _setup_scene(self):
         """Initialize plane and target spheres."""
-        self.scene.add_entity(morph=gs.morphs.Plane()) # Plane environment with no obstacles
+        # self.scene.add_entity(morph=gs.morphs.Plane()) # Plane environment with no obstacles
+        self.scene.add_entity(morph=gs.morphs.Mesh(file="usd/warehouse_new/warehouse-01.mtl.obj", scale=1, fixed=True, collision=False))
+            
         self.target_markers = [] # Initialize red balls as targets
         for _ in self.target_trajectory:
             marker = self.scene.add_entity(
@@ -213,7 +215,8 @@ class MultiHoverEnv:
 
             # Use genesis feature to take picture with cam and save fig
             if self.snapshots:
-                rgb, _, _, _ = self.cam.render(rgb=True, depth=True, segmentation=True, normal=True)
+                # rgb, _, _, _ = self.cam.render(rgb=True, depth=True, segmentation=True, normal=True)
+                rgb, _, _, _ = self.cam.render(rgb=True, depth=False, segmentation=False, normal=False)
                 # Convert RGB to BGR for saving
                 bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
                 cv2.imwrite(os.path.join(self.picture_save_path, f"snapshot_{step:04d}.png"), bgr)
@@ -223,7 +226,7 @@ class MultiHoverEnv:
                 pass
             
             # Use OpenAI API to analyze the picture
-            openai_api_call(os.path.join(self.picture_save_path, f"snapshot_{step:04d}.png"))
+            # openai_api_call(os.path.join(self.picture_save_path, f"snapshot_{step:04d}.png"))
             
             #################### pre-step ####################
             # TO DO: Call LLM API to input way-points based on current drone state

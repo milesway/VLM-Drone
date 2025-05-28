@@ -52,6 +52,8 @@ dependencies = [
     "rtree",
     # Used for loading raytracing special texture images used by LuisaRender
     "OpenEXR",
+    # OpenUSD support
+    "usd-core",
     # Motion Planning library
     # * 1.7.0: First version distributed on PyPI (no pre-compiled binaries for Windows OS).
     #          Fix OMPL DLL search directory.
