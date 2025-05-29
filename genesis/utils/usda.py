@@ -365,7 +365,12 @@ def parse_mesh_usd(path, group_by_material, scale, surface):
                 uv_name = uv_names[material_id]
 
             # parse uvs
-            uv_var = UsdGeom.PrimvarsAPI(prim).GetPrimvar(uv_name)
+            try:
+                uv_var = UsdGeom.PrimvarsAPI(prim).GetPrimvar(uv_name)
+            except Exception as e:
+                gs.logger.warning(f"Fail to parse uv for mesh {mesh_path} in usd file {path} with message: {e}.")
+                continue
+            # uv_var = UsdGeom.PrimvarsAPI(prim).GetPrimvar(uv_name)
             uvs = None
             if uv_var.IsDefined() and uv_var.HasValue():
                 uvs = np.array(uv_var.ComputeFlattened(), dtype=np.float32)

@@ -10,11 +10,7 @@ from multi_hover_env_with_vlm import MultiHoverEnv
 
 def main():
     # Define target trajectory (list of 3D coordinates)
-    target_trajectory = [
-        [1.0, 1.0, 0.5],     # Target 1
-        [-1.0, 1.0, 0.7],    # Target 2
-        [0.0, -1.0, 0.3],    # Target 3
-    ]
+    target_trajectory = [np.random.rand(3) for _ in range(5)]
     
     # Create directories for saving outputs
     base_dir = "vlm_test_outputs"

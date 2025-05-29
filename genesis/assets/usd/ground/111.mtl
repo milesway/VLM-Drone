@@ -1,0 +1,47 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.4.4108939008)
+
+newmtl ParquetFloor
+Kd 1 1 1
+illum 1
+map_Kd ./Parquet_Color.png
+bump ./Parquet_Normal.png
+map_bump ./Parquet_Normal.png
+
+newmtl WhitePlastic
+Kd 1 1 1
+illum 1
+map_Kd ./WhitePlastic_Color.png
+bump ./WhitePlastic_Normal.png
+map_bump ./WhitePlastic_Normal.png
+
+newmtl WhitePlastic2
+Kd 1 1 1
+illum 1
+map_Kd ./WhitePlastic_Color.png
+bump ./WhitePlastic_Normal.png
+map_bump ./WhitePlastic_Normal.png
+
+newmtl WoodWall
+Kd 1 1 1
+illum 1
+map_Kd ./WallWood_Color.png
+bump ./WallWood_Normal.png
+map_bump ./WallWood_Normal.png
+
+newmtl Glass
+Kd 1 1 1
+illum 1
+
+newmtl Light
+Kd 1 0.999989986 0.999989986
+Ke 1 0.98951 0.939999998
+illum 1
+
+newmtl Table
+Kd 1 1 1
+illum 1
+map_Kd ./DefaultMaterial_Base_Color.png
+bump ./DefaultMaterial_Normal_DirectX.png
+map_bump ./DefaultMaterial_Normal_DirectX.png
+

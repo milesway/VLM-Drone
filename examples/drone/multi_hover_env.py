@@ -50,7 +50,33 @@ class MultiHoverEnv:
         gs.init(backend=gs.gpu)
         self.scene = gs.Scene(
             show_viewer=show_viewer,
-            sim_options=gs.options.SimOptions(dt=self.dt)
+            viewer_options=gs.options.ViewerOptions(
+            res=(500, 500),
+            camera_pos=(8.5, 0.0, 4.5),
+            camera_lookat=(3.0, 0.0, 0.5),
+            camera_fov=50,
+        ),
+            vis_options = gs.options.VisOptions(
+                    show_world_frame = True, # visualize the coordinate frame of `world` at its origin
+                    world_frame_size = 1.0, # length of the world frame in meter
+                    show_link_frame  = False, # do not visualize coordinate frames of entity links
+                    show_cameras     = False, # do not visualize mesh and frustum of the cameras added
+                    plane_reflection = True, # turn on plane reflection
+                    ambient_light    = (0.1, 0.1, 0.1), # ambient light setting
+                ),
+            sim_options=gs.options.SimOptions(dt=self.dt),
+            renderer=gs.renderers.RayTracer(  # type: ignore
+            env_surface=gs.surfaces.Emission(
+                emissive_texture=gs.textures.ImageTexture(
+                    image_path="textures/indoor_bright.png",
+                ),
+            ),
+            env_radius=15.0,
+            env_euler=(0, 0, 180),
+            lights=[
+                {"pos": (0.0, 0.0, 10.0), "radius": 3.0, "color": (15.0, 15.0, 15.0)},
+            ],
+        ),
         )
 
         # Load trained RL model and config
@@ -88,8 +114,17 @@ class MultiHoverEnv:
     def _setup_scene(self):
         """Initialize plane and target spheres."""
         # self.scene.add_entity(morph=gs.morphs.Plane()) # Plane environment with no obstacles
-        self.scene.add_entity(morph=gs.morphs.Mesh(file="usd/warehouse_new/warehouse-01.mtl.obj", scale=1, fixed=True, collision=False))
-            
+        self.scene.add_entity(morph=gs.morphs.Mesh(file="usd/digital_updated/untitled.obj", scale=1, fixed=True, collision=False, pos=(0, 0, 0)))
+    #     self.scene.add_entity(morph=gs.morphs.Plane(
+    #         pos=(0.0, 0.0, -0.5),
+    #     ),
+    #    surface=gs.surfaces.Rough(
+    #         diffuse_texture=gs.textures.ImageTexture(
+    #             image_path="usd/ground/Parquet_Color.png",
+    #         )
+    #     ),
+    # )
+
         self.target_markers = [] # Initialize red balls as targets
         for _ in self.target_trajectory:
             marker = self.scene.add_entity(
@@ -113,7 +148,7 @@ class MultiHoverEnv:
     def _setup_camera(self):
         self.cam = self.scene.add_camera(
             res=(640, 480), # camera resolution 
-            pos=(5.0, 1.0, 1.5),
+            pos=(1.0, 5.0, 2.0), # 左正右负, 前负后正, 上正下负
             lookat=(0.0, 0.0, 0.5),
             fov=30,
             GUI=True, # Display rendered image from the camera when running simulation

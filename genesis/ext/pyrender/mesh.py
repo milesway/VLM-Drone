@@ -207,7 +207,32 @@ class Mesh(object):
                 vertex_mapping = m.faces.reshape((-1,))
 
             # Compute colors, texture coords, and material properties
-            color_0, texcoord_0, primitive_material = Mesh._get_trimesh_props(m, smooth=smooth, material=material)
+            try:
+                color_0, texcoord_0, primitive_material = Mesh._get_trimesh_props(m, smooth=smooth, material=material)  
+            except Exception as e:
+                print(f"Fail to parse mesh with message: {e}.")
+                primitive_material = MetallicRoughnessMaterial(
+                    alphaMode="BLEND", baseColorFactor=[0.3, 0.3, 0.3, 1.0], metallicFactor=0.2, roughnessFactor=0.8
+                )
+
+                primitive_material.wireframe = wireframe
+                primitives.append(
+                    Primitive(
+                        positions=positions,
+                        normals=normals,
+                        texcoord_0=np.zeros((positions.shape[0], 2)),
+                        color_0=np.ones((positions.shape[0], 3)),
+                        indices=indices,
+                        material=primitive_material,
+                        mode=GLTF.TRIANGLES,
+                        poses=poses,
+                        vertex_mapping=vertex_mapping,
+                        double_sided=double_sided,
+                        is_floor=is_floor,
+                        env_shared=env_shared,
+                    )
+                )
+                continue
 
             # Override if material is given.
             if material is not None:
