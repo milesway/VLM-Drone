@@ -11,6 +11,8 @@ description = "A universal and generative physics engine"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 dependencies = [
+    "openai",
+    "dotenv",
     "psutil",
     "taichi >= 1.7.2",
     "pydantic == 2.7.1",
