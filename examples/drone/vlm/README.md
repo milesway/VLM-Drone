@@ -92,6 +92,9 @@ The VLM returns structured planning decisions:
 
 ## 🚀 Usage
 
+```
+python run.py --env_name warehouse --save_path ./outputs/exp01 --ckpt ./checkpoints/rl_model --n_drones 4 --llm_replan_interval 0 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.1 --show_viewer
+```
 ### Basic VLM-Enabled Simulation
 
 ```python
