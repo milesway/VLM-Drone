@@ -238,7 +238,7 @@ class MultiHoverEnv:
         self.controllers = []  # PID controllers for PID mode
 
         for _ in range(self.n_drones):
-            pos = np.random.uniform(low=[-2.0, 2.5, 1.2], high=[0.0, 3.0, 2.0]) # Drone initial position
+            pos = np.random.uniform(low=[-2.5, 2.3, 1.0], high=[0.0, 3.5, 2.8]) # Drone initial position
             drone = self.scene.add_entity(
                 morph=gs.morphs.Drone(file="urdf/drones/cf2x.urdf", scale=1, pos=pos)
             )
@@ -258,8 +258,8 @@ class MultiHoverEnv:
         # Camera pose for normal recording
         self.cam = self.scene.add_camera(
             res=(1280, 960), # camera resolution 
-            pos=(-2.0, 4.5, 2.0), # 左正右负, 前负后正, 上正下负
-            lookat=(-1.0, 2.0, 1.5),
+            pos=(-2.3, 4.5, 2.0), # 左正右负, 前负后正, 上正下负
+            lookat=(-1.3, 2.0, 1.5),
             fov=90,
             GUI=True, # Display rendered image from the camera when running simulation
         ) 
