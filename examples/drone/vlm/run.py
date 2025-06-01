@@ -47,7 +47,6 @@ def main(args):
             y_range=args.y_range,
             z_range=args.z_range
         )
-        # target_trajectory = [(1.5, 0.3, 2.5), (1.5, 5.0, 3.0), (-7.5, 5.0, 3.0), (-7.5, 0.3, 2.5)]  # Waypoints for flying around obstacle(shelves)
 
 
     else:
@@ -85,9 +84,9 @@ if __name__ == "__main__":
     parser.add_argument("--env_name", type=str, default="plain", choices=["plain", "warehouse"])
     parser.add_argument("--save_path", type=str, default="./outputs")
     # Target generation ranges (for warehouse mode)
-    parser.add_argument("--x_range", type=float, nargs=2, default=[-5.0, 1.5], help="Range for x-axis target positions")
-    parser.add_argument("--y_range", type=float, nargs=2, default=[4.0, 6.0], help="Range for y-axis target positions")
-    parser.add_argument("--z_range", type=float, nargs=2, default=[2.0, 5.0], help="Range for z-axis target positions")
+    parser.add_argument("--x_range", type=float, nargs=2, default=[-2.0, 0.0], help="Range for x-axis target positions")
+    parser.add_argument("--y_range", type=float, nargs=2, default=[2.5, 3.0], help="Range for y-axis target positions")
+    parser.add_argument("--z_range", type=float, nargs=2, default=[1.2, 2.0], help="Range for z-axis target positions")
 
     # Drone
     parser.add_argument("--ckpt", type=str, default="./checkpoints/rl_model")

@@ -128,8 +128,8 @@ class MultiHoverEnv:
                 show_viewer=show_viewer,
                 viewer_options=gs.options.ViewerOptions(
                 res=(500, 500),
-                camera_pos=(-2.3, 5.3, 8.0),
-                camera_lookat=(-2.0, 5.0, 1.0),
+                camera_pos=(-1.5, 1.2, 5.0),
+                camera_lookat=(-1.3, 1.0, 2.0),
                 camera_fov=90,
             ),
                 sim_options=gs.options.SimOptions(dt=self.dt)
@@ -200,7 +200,7 @@ class MultiHoverEnv:
     def _setup_scene(self):
         """Initialize plane and target spheres."""
         if self.env_name == "warehouse":        
-            self.scene.add_entity(morph=gs.morphs.Mesh(file="usd/digital_updated/untitled.obj", scale=1.5, fixed=True, collision=True, pos=(0, 0, 0)))
+            self.scene.add_entity(morph=gs.morphs.Mesh(file="usd/digital_updated/untitled.obj", scale=0.8, fixed=True, collision=False, pos=(0, 0, 0)))
         elif self.env_name == "plain":
             self.scene.add_entity(morph=gs.morphs.Plane(
                 pos=(0.0, 0.0, -0.5),
@@ -224,7 +224,7 @@ class MultiHoverEnv:
         self.target_markers = [] # Initialize red balls as targets
         for _ in self.target_trajectory:
             marker = self.scene.add_entity(
-                morph=gs.morphs.Mesh(file="meshes/sphere.obj", scale=0.15, fixed=True, collision=False),
+                morph=gs.morphs.Mesh(file="meshes/sphere.obj", scale=0.05, fixed=True, collision=False),
                 surface=gs.surfaces.Rough(
                     diffuse_texture=gs.textures.ColorTexture(color=(1.0, 0.0, 0.0))
                 )
@@ -238,9 +238,9 @@ class MultiHoverEnv:
         self.controllers = []  # PID controllers for PID mode
 
         for _ in range(self.n_drones):
-            pos = np.random.uniform(low=[-5.0, 4.0, 2.0], high=[1.5, 6.0, 5.0]) # Drone initial position
+            pos = np.random.uniform(low=[-2.0, 2.5, 1.2], high=[0.0, 3.0, 2.0]) # Drone initial position
             drone = self.scene.add_entity(
-                morph=gs.morphs.Drone(file="urdf/drones/cf2x.urdf", scale=3.0, pos=pos)
+                morph=gs.morphs.Drone(file="urdf/drones/cf2x.urdf", scale=1, pos=pos)
             )
             self.drones.append(drone)
             
@@ -257,20 +257,12 @@ class MultiHoverEnv:
     def _setup_camera(self):
         # Camera pose for normal recording
         self.cam = self.scene.add_camera(
-            res=(640, 480), # camera resolution 
-            pos=(-1.5, 9.0, 4),
-            lookat=(-2.5, 2.0, 1.6),
+            res=(1280, 960), # camera resolution 
+            pos=(-2.0, 4.5, 2.0), # 左正右负, 前负后正, 上正下负
+            lookat=(-1.0, 2.0, 1.5),
             fov=90,
             GUI=True, # Display rendered image from the camera when running simulation
-        )
-        # # Camera pose for top view recording (preplanned waypoints)
-        # self.cam = self.scene.add_camera(
-        #     res=(640, 480), # camera resolution 
-        #     pos=(-3.5, 4.0, 7.5),
-        #     lookat=(-3.0, 4.0, 3.5),
-        #     fov=120,
-        #     GUI=True, # Display rendered image from the camera when running simulation
-        # )
+        ) 
         
 
     def _greedy_target_assignment(self):
@@ -692,7 +684,7 @@ class MultiHoverEnv:
                     elif self.control_mode == "rl" and self.policy is not None:
                         # Use RL policy
                         last_action = torch.zeros((4,))
-                        obs = self._get_obs(drone, target, last_action)
+                        obs = self._get_obs(drone, target, last_action) 
                         if obs is not None:
                             obs = obs.unsqueeze(0)
                             action = self.policy.act_inference(obs).squeeze(0)
