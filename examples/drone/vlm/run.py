@@ -68,6 +68,7 @@ def main(args):
         model_name=args.model_name,
         min_distance=args.min_safe_distance,
         target_threshold=args.target_threshold,
+        collision_llm_interval=args.collision_llm_interval,
         enable_ray_tracing=args.enable_ray_tracing,
         show_viewer=args.show_viewer
     )
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     # Environment
     parser.add_argument("--env_name", type=str, default="plain", choices=["plain", "warehouse"])
     parser.add_argument("--save_path", type=str, default="./outputs")
-    # Target generation ranges (for warehouse mode)
+    # Target generation ranges (default for warehouse mode)
     parser.add_argument("--x_range", type=float, nargs=2, default=[-2.5, 0.0], help="Range for x-axis target positions")
     parser.add_argument("--y_range", type=float, nargs=2, default=[2.3, 3.5], help="Range for y-axis target positions")
     parser.add_argument("--z_range", type=float, nargs=2, default=[1.0, 2.2], help="Range for z-axis target positions")
@@ -98,6 +99,7 @@ if __name__ == "__main__":
     # Safety
     parser.add_argument("--min_safe_distance", type=float, default=0.3)
     parser.add_argument("--target_threshold", type=float, default=0.1)
+    parser.add_argument("--collision_llm_interval", type=int, default=20)
     # Viewer
     parser.add_argument("--show_viewer", action="store_true", help="Enable the viewer (default: True)")
     parser.add_argument("--enable_ray_tracing", action="store_true", help="Enable ray tracing (default: False)")
@@ -124,6 +126,7 @@ if __name__ == "__main__":
     print("--------------Safety -----------------------")
     print(f"Minimum safe distance: {args.min_safe_distance} meters")
     print(f"Target threshold: {args.target_threshold} meters")
+    print(f"Collision LLM interval: {args.collision_llm_interval} steps")
     
     print("--------------Viewer -----------------------")
     print(f"Show viewer: {args.show_viewer}")

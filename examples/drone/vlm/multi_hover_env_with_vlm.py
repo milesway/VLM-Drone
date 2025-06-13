@@ -28,6 +28,7 @@ class MultiHoverEnv:
                 model_name, # LLM model name
                 min_distance, # Minimum safe distance between drones
                 target_threshold, # Distance threshold to consider target reached   
+                collision_llm_interval, # How often to call LLM when collision detected
                 enable_ray_tracing, # Whether to enable ray tracing
                 show_viewer, # Whether to show viewer
                 pid_params = None # PID parameters for PID controller mode
@@ -55,7 +56,7 @@ class MultiHoverEnv:
         self.current_waypoints = None  # Will store LLM-generated waypoints
         
         # Collision detection and LLM calling control
-        self.collision_llm_interval = 20  # Call LLM every 20 timesteps when collision detected
+        self.collision_llm_interval = collision_llm_interval  # Call LLM every 20 timesteps when collision detected
         self.last_collision_llm_step = -1  # Track when last collision-triggered LLM call was made
         self.collision_detected_recently = False  # Track if collision is ongoing
         

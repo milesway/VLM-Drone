@@ -29,6 +29,54 @@ This advanced drone simulation environment integrates Vision Language Model (VLM
 - **Statistical Summaries**: End-of-simulation analysis with insights
 - **Structured File Organization**: Organized logs by environment, model, and mode
 
+## 🚀 Usage
+
+### Demo Config for plain environment:
+```python
+python run.py --env_name plain --save_path ./outputs/exp04 --ckpt ./checkpoints/rl_model --n_drones 3 --llm_replan_interval 0 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer    
+```
+
+### Configuration Options
+
+| Parameter              | Type     | Default                          | Description |
+|------------------------|----------|----------------------------------|-------------|
+| `env_name`             | str      | `"warehouse"`                        | Simulation environment. Options: `"plain"` or `"warehouse"` |
+| `llm_replan_interval`  | int      | `5`                              | Number of steps between LLM-based replanning. `0` disables LLM control |
+| `use_vision`           | bool     | `False`                          | Use visual inputs (images) for LLM guidance instead of text-only prompts |
+| `model_name`           | str      | `"gpt-4o"`                       | OpenAI model to use |
+| `min_safe_distance`    | float    | `0.3`                            | Minimum safe distance allowed between drones (in meters) |
+| `target_threshold`     | float    | `0.1`                            | Distance threshold below which target considered reached |
+| `collision_llm_interval` | int | `20` | Steps between collision-triggered LLM calls |
+| `save_path`            | str      | `"./outputs"`                    | Path to save simulation outputs |
+| `ckpt`                 | str      | `"./checkpoints/rl_model"`       | Path to checkpoint for loading a trained RL model, including a `*.pt` and a `cfgs.pkl` file|
+| `n_drones`             | int      | `3`                              | Number of drones to control in the simulation |
+| `x_range`, `y_range`, `z_range`              | list[float, float] | `[-2.5, 0.0]`, `[2.3, 3.5]`, `[1.0, 2.2]` for warehouse environment         | Range of randonly generated target positions on x, y and z-axis |
+| `show_viewer`          | bool     | `True`                           | Whether to launch a 3D viewer for visualizing the simulation |
+| `enable_ray_tracing`   | bool     | `False`                          | Whether to enable ray tracing in the viewer for more realistic rendering |
+
+### Additional Configurations
+
+You can fine-tune simulation behavior by modifying the following lines in `multi_hover_env_with_vlm.py`:
+
+- **Set the range of randomly generated initial positions for drones** at **line 242**.
+- **Set the camera pose for the simulation environment** at **line 258**.
+
+To set a top-down view in the warehouse environment, modify the `_setup_camera` function as follows:
+
+```python
+def _setup_camera(self):
+    # Camera pose for Top-Down View
+    self.cam = self.scene.add_camera(
+        res=(500, 500),
+        pos=(-1.5, 1.2, 5.0),
+        lookat=(-1.3, 1.0, 2.0),
+        fov=90,
+        GUI=True,  # Display rendered image from the camera during simulation
+    )
+```
+
+This camera setup provides a clear bird's-eye view over the simulation area.
+
 ## 📋 Input to VLM
 
 The VLM receives comprehensive state information:
@@ -90,158 +138,6 @@ The VLM returns structured planning decisions:
 }
 ```
 
-## 🚀 Usage
-
-### Demo Config for plain environment:
-```python
-python run.py --env_name plain --save_path ./outputs/exp04 --ckpt ./checkpoints/rl_model --n_drones 3 --llm_replan_interval 0 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer    
-```
-#### `run.py` Target Initialization Range
-```python
-    parser.add_argument("--x_range", type=float, nargs=2, default=[-1.0, 1.0])
-    parser.add_argument("--y_range", type=float, nargs=2, default=[-1.0, 1.0])
-    parser.add_argument("--z_range", type=float, nargs=2, default=[0.5, 1.5])
-```
-#### `multi_hover_env_with_vlm.py` Camera Pose - line 258
-```python
-    def _setup_camera(self):
-        # Camera pose for normal recording
-        self.cam = self.scene.add_camera(
-            res=(1280, 960), # camera resolution 
-            pos=(1.0, 5.0, 2.0), # 左正右负, 前负后正, 上正下负
-            lookat=(0.0, 0.0, 0.5),
-            fov=30,
-            GUI=True, # Display rendered image from the camera when running simulation
-        )
-```
-#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
-```python
-    pos = np.random.uniform(low=[-1, -1, 0.2], high=[1, 1, 0.5]) # Drone initial position
-```
-
-### Demo Config for warehouse:
-```python
-python run.py --env_name warehouse --save_path ./outputs/exp04 --ckpt ./checkpoints/rl_model --n_drones 4 --llm_replan_interval 50 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer  
-```
-#### `run.py` Target Initialization Range
-```python
-    parser.add_argument("--x_range", type=float, nargs=2, default=[-2.0, 0.0])
-    parser.add_argument("--y_range", type=float, nargs=2, default=[2.5, 3.0])
-    parser.add_argument("--z_range", type=float, nargs=2, default=[1.2, 2.0])
-```
-#### `multi_hover_env_with_vlm.py` Camera Pose - line 258
-```python
-    def _setup_camera(self):
-        # Camera pose for normal recording
-        self.cam = self.scene.add_camera(
-            res=(1280, 960), # camera resolution 
-            pos=(-2.0, 4.5, 2.0), # 左正右负, 前负后正, 上正下负
-            lookat=(-1.0, 2.0, 1.5),
-            fov=90,
-            GUI=True, # Display rendered image from the camera when running simulation
-        )
-```
-#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
-```python
-    pos = np.random.uniform(low=[-2.0, 2.5, 1.2], high=[0.0, 3.0, 2.0]) # Drone initial position
-```
-
-### TOP-DOWN Demo Config for warehouse (obstacle flight):
-
-#### Pseudo Waypoints
-```python
-        target_trajectory = [(-4.5, 2.2, 1.5), 
-                             (-4.5, 1.2, 1.8), 
-                             (-4.2, 0.8, 1.5), 
-                             (-4.0, 0.3, 1.4), 
-                             (-2.8, 0.2, 1.3), 
-                             (-1.5, 0.2, 1.3),
-                             (-0.2, 0.3, 1.4),
-                             (1.0, 0.3, 1.7),
-                             (1.0, 1.2, 1.6),
-                             (1.0, 2.2, 1.6)]  # Waypoints for flying around obstacle(shelves)
-
-```
-#### `multi_hover_env_with_vlm.py` TOP-DOWN View Camera Pose - line 258 
-```python
-    def _setup_camera(self):
-        # Camera pose for Top-Down View
-        self.cam = self.scene.add_camera(
-            res=(500, 500),
-            pos=(-1.5, 1.2, 5.0),
-            lookat=(-1.3, 1.0, 2.0),
-            fov=90,
-            GUI=True, # Display rendered image from the camera when running simulation
-        )
-```
-#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
-```python
-    pos = np.random.uniform(low=[-4.0, 2.5, 1.6], high=[-4.2, 3.0, 2.0]) # Drone initial position
-```
-
-### Basic VLM-Enabled Simulation
-
-```python
-from multi_hover_env_with_vlm import MultiHoverEnv
-
-# Define target points
-targets = [[1.0, 1.0, 0.5], [-1.0, 1.0, 0.7], [0.0, -1.0, 0.3]]
-
-# Create environment with VLM
-env = MultiHoverEnv(
-    picture_save_path="./outputs/pictures",
-    video_save_path="./outputs/videos", 
-    state_params_save_path="./outputs/states",
-    target_trajectory=targets,
-    env_name="test_sim",
-    save_path="./outputs",
-    ckpt="./checkpoints/rl_model",  # RL checkpoint (None for PID mode)
-    n_drones=3,
-    llm_replan_interval=50,      # Regular LLM calls every 50 steps
-    use_vision=True,             # Enable vision-based VLM
-    model_name="gpt-4o",         # LLM model to use
-    min_distance=0.5,            # Safe distance between drones
-    target_threshold=0.1,        # Target reach threshold
-    enable_ray_tracing=False,    # Visual effects
-    show_viewer=True             # Show simulation window
-)
-
-# Run simulation
-env.run()
-```
-
-### Configuration Options
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `llm_replan_interval` | int | 50 | Steps between regular LLM calls (0 disables LLM) |
-| `use_vision` | bool | True | Enable vision-based VLM vs text-only LLM |
-| `model_name` | str | "gpt-4o" | OpenAI model to use |
-| `min_distance` | float | 0.5 | Minimum safe distance between drones |
-| `target_threshold` | float | 0.1 | Distance threshold to consider target reached |
-| `ckpt` | str/None | None | Path to RL checkpoint (None uses PID control) |
-| `collision_llm_interval` | int | 20 | Steps between collision-triggered LLM calls |
-
-### Advanced Usage Examples
-
-```python
-# Text-only LLM mode with PID control
-env = MultiHoverEnv(
-    # ... basic params ...
-    llm_replan_interval=100,
-    use_vision=False,           # Text-only mode
-    model_name="gpt-4o-mini",   # More cost-effective model
-    ckpt=None,                  # Use PID control
-    pid_params=custom_pid_gains # Custom PID parameters
-)
-
-# Disable LLM entirely (pure PID/RL control)
-env = MultiHoverEnv(
-    # ... basic params ...
-    llm_replan_interval=0,      # Disable LLM
-    ckpt="./rl_checkpoint"      # Use RL control only
-)
-```
 
 ## 📁 File Structure
 
