@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VIMA | General Robot Manipulation with Multimodal Prompts</title>
+
+    <script>
+        var task_map = {
+            "simple-object-manipulation": "simple_object_manipulation",
+            "visual-goal-reaching": "visual_goal_reaching",
+            "novel-concept-grounding": "novel_concept_grounding",
+            "one-shot-video-imitation": "one_shot_video_imitation",
+            "visual-constraint-satisfaction": "visual_constraint_satisfaction",
+            "visual-reasoning": "visual_reasoning"
+        };
+
+        function updateDemoVideo(category) {
+            // var demo = document.getElementById("single-menu-demos").value;
+            var task = document.getElementById(category + "-menu-tasks").value;
+            var inst = document.getElementById(category + "-menu-instances").value;
+
+            console.log(task_map[category], task, inst)
+
+            var video = document.getElementById(category + "-single-task-video");
+            video.src = "assets/videos/demos/" +
+                task_map[category] +
+                "/" +
+                task +
+                "/" +
+                inst +
+                ".mp4";
+            video.playbackRate = 2.0;
+            video.play();
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="./static/css/academicons.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-1 publication-title">Hierarchical System for Safe Adaptive Multi Drone Control</h1>
+                    <h3 class="title is-4 conference-authors"><a target="_blank" href="https://icml.cc/">CS 275 Spring 2025</a>
+                    </h3>
+                    <div class="is-size-5 publication-authors">
+            <span class="author-block">
+                Zhi&#160;Li<sup>1</sup>,
+                Yuchen&#160;Liu<sup>1</sup>,
+                Yufei&#160;Song<sup>1</sup>,
+            </span>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block"><sup>1</sup>UCLA Electrical and Computer Engineering; </span>
+                    </div>
+
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+
+                <span class="link-block">
+                <!-- TODO PDF Link. -->
+                <a target="_blank" href="assets/vima_paper.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>PDF</span>
+                </a>
+              </span>
+                            <!-- TODO Code Link. -->
+                            <span class="link-block">
+
+                <a target="_blank" href="https://github.com/milesway/VLM-Drone"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+                <!-- TODO Google Drive Video Link. -->
+                            <span class="link-block">
+                <a target="_blank" href="https://drive.google.com/drive/folders/1zNcX7y0y-2Ama7OJnMYpT9D0PkaT6cl5?usp=sharing"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-google-drive"></i>
+                  </span>
+                  <span>Videos</span>
+                </a>
+                <!-- <a target="_blank" href="https://github.com/vimalabs/VIMA#pretrained-models"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fa fa-network-wired"></i>
+                  </span>
+                  <span>Models</span>
+                </a>
+                <a target="_blank" href="https://github.com/vimalabs/VimaBench"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-robot"></i>
+                  </span>
+                  <span>Benchmark</span>
+                </a>
+                <a target="_blank" href="https://huggingface.co/datasets/VIMA/VIMA-Data"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-database"></i>
+                  </span>
+                  <span>Dataset</span>
+                </a> -->
+              </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- <section class="hero is-light is-small">
+    <div class="hero-body">
+        <div class="container">
+            <div id="results-carousel" class="carousel results-carousel">
+                <div class="item item-sweep_without_exceeding">
+                    <video poster="" id="sweep_without_exceeding" autoplay controls muted loop height="100%"
+                           playbackRate="2.0">
+                        <source src="assets/videos/VLM_n5_cluttered_RayTrace.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+                <div class="item item-sweep_without_touching">
+                    <video poster="" id="sweep_without_touching" autoplay controls muted loop height="100%"
+                           playbackRate="2.0">
+                        <source src="assets/videos/warehouse_flight_vlm.mp4"
+                                type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column">
+                <h2 class="title is-3">Abstract</h2>
+                <div class="content has-text-justified">
+                    <p style="font-size: 125%">
+                        Coordinating heterogeneous drone teams in cluttered, unfamiliar airspaces requires global task reasoning, provably safe local maneuvers, and real-time execution on lightweight hardware.  Classical geometric or consensus-based planners provide formal guarantees but rely on pre-built maps and cannot adapt for more efficient planning, while end-to-end policies are adaptable yet limited to a trained environment and often compromise safety.
+We propose the first hierarchical framework that places a large vision language model (VLM) at the top of a low-level controller, allowing each drone to describe its live observations in natural language, receive a goal-directed flight plan that assumes no prior environmental knowledge, and execute that plan through reinforcement-learning (RL) navigation.  The architecture supports multiple fall-back modes that degrade gracefully from full autonomy (VLM + vision + RL) to a perception-free emergency loop, ensuring collision-free operation even under sensor dropout, API failure, or tight compute budgets.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-widescreen">
+        <div class="rows">
+            <div class="rows is-centered ">
+                <div class="row is-full-width">
+                    <img src="assets/images/VLMsystem.png" class="interpolation-image"
+                         alt="" style="display: block; margin-left: auto; margin-right: auto"/>
+                    <br>
+                    <span style="font-size: 110%"><b>VLM-Guided Multi-Drone Coordination System</b> Our system architecture comprises four key components: (1) a multi-modal perception module, (2) a VLM-based planning engine with conversation history, (3) a hybrid control system supporting both reinforcement learning and classical PID controllers, and (4) a comprehensive logging and analysis framework.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container is-max-widescreen">
+        <div class="rows">
+            <div class="rows is-centered ">
+                <div class="row is-full-width">
+                    <img src="assets/images/VLMarch.drawio.png" class="interpolation-image"
+                         alt="" style="display: block; margin-left: auto; margin-right: auto"/>
+                    <br>
+                    <span style="font-size: 110%"><b>VLM Implementation Details</b> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Model-->
+<section class="section">
+    <div class="container is-max-widescreen">
+        <div class="rows">
+            <div class="rows is-centered ">
+                <div class="row is-full-width">
+                    <h2 class="title is-3"><span class="dvima">VLM-Planning (Collision Avoidance)</span></h2>
+                    <video poster="" autoplay controls muted loop height="100%">
+                        <source src="assets/videos/VLM_n5_cluttered_RayTrace.mp4"
+                                type="video/mp4">
+                    </video>
+                    <br>
+                    <span style="font-size: 110%">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-widescreen">
+        <div class="rows">
+            <div class="rows is-centered ">
+                <div class="row is-full-width">
+                    <h2 class="title is-3"><span class="dvima">VLM-Planning (Obstacle Avoidance)</span></h2>
+                    <video poster="" autoplay controls muted loop height="100%">
+                        <source src="assets/videos/warehouse_flight_vlm.mp4"
+                                type="video/mp4">
+                    </video>
+                    <br>
+                    <span style="font-size: 110%">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!--Conclusion-->
+<section class="section">
+    <div class="container is-max-widescreen">
+        <div class="rows">
+            <div class="rows is-centered ">
+                <div class="row is-full-width">
+                    <h2 class="title is-3"><span
+                            class="dvima">Conclusion</span></h2>
+
+                    <p style="font-size: 125%">
+                        TODO
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column">
+                <div class="content has-text-centered">
+                    <p>
+                        Website template borrowed from <a
+                            href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> and <a
+                            href="https://github.com/cliport/cliport.github.io">CLIPort</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
