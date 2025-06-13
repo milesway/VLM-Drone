@@ -33,16 +33,18 @@ This advanced drone simulation environment integrates Vision Language Model (VLM
 
 This project relies on the [Genesis](https://github.com/Genesis-Embodied-AI/Genesis) simulation framework, included as a Git submodule under the `genesis/` directory.
 
-To properly clone the project **with all dependencies**, run:
+1. To properly clone the project **with all dependencies**, run:
 
-```bash
-git clone --recurse-submodules https://github.com/milesway/VLM-Drone.git
-cd VLM-Drone
-```
-Install the Genesis package in development mode:
-```bash
-pip install -e ./genesis[dev]
-```
+    ```bash
+    git clone --recurse-submodules https://github.com/milesway/VLM-Drone.git
+    cd VLM-Drone
+    ```
+2. Install the Genesis package in development mode:
+    ```bash
+    pip install -e ./genesis[dev]
+    ```
+
+3. [Optional] To enable ray tracing with option `enable_ray_tracing`, follow [this link](https://genesis-world.readthedocs.io/en/latest/user_guide/getting_started/visualization.html#photo-realistic-ray-tracing-rendering) instructions to install `LuisaRender` module.
 
 ## 🚀 Usage
 
