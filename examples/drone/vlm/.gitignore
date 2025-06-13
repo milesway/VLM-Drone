@@ -1,1 +1,3 @@
+outputs/
+checkpoints/rl_model
 test_outputs/

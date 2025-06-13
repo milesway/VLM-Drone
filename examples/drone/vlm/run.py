@@ -6,7 +6,17 @@ import argparse
 # Local imports
 from multi_hover_env_with_vlm import MultiHoverEnv
 
-
+def generate_targets_in_range(n_targets, x_range, y_range, z_range):
+    """Generate n_targets within specified XYZ ranges."""
+    return [
+        [
+            round(np.random.uniform(*x_range), 3),
+            round(np.random.uniform(*y_range), 3),
+            round(np.random.uniform(*z_range), 3),
+        ]
+        for _ in range(n_targets)
+    ]
+    
 def main(args):
     
     # Create directories for saving outputs
@@ -22,10 +32,23 @@ def main(args):
 
     if args.env_name == "plain":
         # Define target trajectory (list of 3D coordinates)
-        target_trajectory = [np.random.rand(3) for _ in range(args.n_drones)]
+        target_trajectory = generate_targets_in_range(
+            args.n_drones,
+            x_range=args.x_range,
+            y_range=args.y_range,
+            z_range=args.z_range
+        )
     elif args.env_name == "warehouse":
         # TODO: Specify target range based on args.target_range
-        target_trajectory = [np.random.rand(3) for _ in range(args.n_drones)]
+        # target_trajectory = [np.random.rand(3) for _ in range(args.n_drones)]
+        target_trajectory = generate_targets_in_range(
+            args.n_drones,
+            x_range=args.x_range,
+            y_range=args.y_range,
+            z_range=args.z_range
+        )
+
+
     else:
         raise ValueError(f"Invalid environment name: {args.env_name}")
     
@@ -60,19 +83,26 @@ if __name__ == "__main__":
     # Environment
     parser.add_argument("--env_name", type=str, default="plain", choices=["plain", "warehouse"])
     parser.add_argument("--save_path", type=str, default="./outputs")
+    # Target generation ranges (for warehouse mode)
+    parser.add_argument("--x_range", type=float, nargs=2, default=[-2.5, 0.0], help="Range for x-axis target positions")
+    parser.add_argument("--y_range", type=float, nargs=2, default=[2.3, 3.5], help="Range for y-axis target positions")
+    parser.add_argument("--z_range", type=float, nargs=2, default=[1.0, 2.2], help="Range for z-axis target positions")
+
     # Drone
-    parser.add_argument("--ckpt", type=int, default=500, choices=[500, None])
+    parser.add_argument("--ckpt", type=str, default="./checkpoints/rl_model")
     parser.add_argument("--n_drones", type=int, default=3)
     # LLM
     parser.add_argument("--llm_replan_interval", type=int, default=5)
-    parser.add_argument("--use_vision", type=bool, default=False)
+    parser.add_argument("--use_vision", action="store_true", help="Use vision for LLM input (default: False)")
     parser.add_argument("--model_name", type=str, default="gpt-4o", choices=["o4-mini", "gpt-4o", "gemini-2.5-pro"])    
     # Safety
     parser.add_argument("--min_safe_distance", type=float, default=0.3)
     parser.add_argument("--target_threshold", type=float, default=0.1)
     # Viewer
-    parser.add_argument("--show_viewer", type=bool, default=True)
-    parser.add_argument("--enable_ray_tracing", type=bool, default=False)
+    parser.add_argument("--show_viewer", action="store_true", help="Enable the viewer (default: True)")
+    parser.add_argument("--enable_ray_tracing", action="store_true", help="Enable ray tracing (default: False)")
+    parser.set_defaults(use_vision=False, show_viewer=True, enable_ray_tracing=False)
+
     args = parser.parse_args()
     
     # print args

@@ -92,6 +92,93 @@ The VLM returns structured planning decisions:
 
 ## 🚀 Usage
 
+### Demo Config for plain environment:
+```python
+python run.py --env_name plain --save_path ./outputs/exp04 --ckpt ./checkpoints/rl_model --n_drones 3 --llm_replan_interval 0 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer    
+```
+#### `run.py` Target Initialization Range
+```python
+    parser.add_argument("--x_range", type=float, nargs=2, default=[-1.0, 1.0])
+    parser.add_argument("--y_range", type=float, nargs=2, default=[-1.0, 1.0])
+    parser.add_argument("--z_range", type=float, nargs=2, default=[0.5, 1.5])
+```
+#### `multi_hover_env_with_vlm.py` Camera Pose - line 258
+```python
+    def _setup_camera(self):
+        # Camera pose for normal recording
+        self.cam = self.scene.add_camera(
+            res=(1280, 960), # camera resolution 
+            pos=(1.0, 5.0, 2.0), # 左正右负, 前负后正, 上正下负
+            lookat=(0.0, 0.0, 0.5),
+            fov=30,
+            GUI=True, # Display rendered image from the camera when running simulation
+        )
+```
+#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
+```python
+    pos = np.random.uniform(low=[-1, -1, 0.2], high=[1, 1, 0.5]) # Drone initial position
+```
+
+### Demo Config for warehouse:
+```python
+python run.py --env_name warehouse --save_path ./outputs/exp04 --ckpt ./checkpoints/rl_model --n_drones 4 --llm_replan_interval 50 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer  
+```
+#### `run.py` Target Initialization Range
+```python
+    parser.add_argument("--x_range", type=float, nargs=2, default=[-2.0, 0.0])
+    parser.add_argument("--y_range", type=float, nargs=2, default=[2.5, 3.0])
+    parser.add_argument("--z_range", type=float, nargs=2, default=[1.2, 2.0])
+```
+#### `multi_hover_env_with_vlm.py` Camera Pose - line 258
+```python
+    def _setup_camera(self):
+        # Camera pose for normal recording
+        self.cam = self.scene.add_camera(
+            res=(1280, 960), # camera resolution 
+            pos=(-2.0, 4.5, 2.0), # 左正右负, 前负后正, 上正下负
+            lookat=(-1.0, 2.0, 1.5),
+            fov=90,
+            GUI=True, # Display rendered image from the camera when running simulation
+        )
+```
+#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
+```python
+    pos = np.random.uniform(low=[-2.0, 2.5, 1.2], high=[0.0, 3.0, 2.0]) # Drone initial position
+```
+
+### TOP-DOWN Demo Config for warehouse (obstacle flight):
+
+#### Pseudo Waypoints
+```python
+        target_trajectory = [(-4.5, 2.2, 1.5), 
+                             (-4.5, 1.2, 1.8), 
+                             (-4.2, 0.8, 1.5), 
+                             (-4.0, 0.3, 1.4), 
+                             (-2.8, 0.2, 1.3), 
+                             (-1.5, 0.2, 1.3),
+                             (-0.2, 0.3, 1.4),
+                             (1.0, 0.3, 1.7),
+                             (1.0, 1.2, 1.6),
+                             (1.0, 2.2, 1.6)]  # Waypoints for flying around obstacle(shelves)
+
+```
+#### `multi_hover_env_with_vlm.py` TOP-DOWN View Camera Pose - line 258 
+```python
+    def _setup_camera(self):
+        # Camera pose for Top-Down View
+        self.cam = self.scene.add_camera(
+            res=(500, 500),
+            pos=(-1.5, 1.2, 5.0),
+            lookat=(-1.3, 1.0, 2.0),
+            fov=90,
+            GUI=True, # Display rendered image from the camera when running simulation
+        )
+```
+#### `multi_hover_env_with_vlm.py` Drone Initialization Position - line 241
+```python
+    pos = np.random.uniform(low=[-4.0, 2.5, 1.6], high=[-4.2, 3.0, 2.0]) # Drone initial position
+```
+
 ### Basic VLM-Enabled Simulation
 
 ```python
