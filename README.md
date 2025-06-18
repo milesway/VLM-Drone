@@ -29,23 +29,13 @@ This advanced drone simulation environment integrates Vision Language Model (VLM
 - **Statistical Summaries**: End-of-simulation analysis with insights
 - **Structured File Organization**: Organized logs by environment, model, and mode
 
-## 🔧 Cloning This Repository with Submodules
-
-This project relies on the [Genesis](https://github.com/Genesis-Embodied-AI/Genesis) simulation framework, included as a Git submodule under the `genesis/` directory.
-
-To properly clone the project **with all dependencies**, run:
-
+## 🔧 Install Scene Assets from HuggingFace
 ```bash
-git clone --recurse-submodules https://github.com/milesway/VLM-Drone.git
-cd VLM-Drone
-```
-Install the Genesis package in development mode:
-```bash
-pip install -e ./genesis[dev]
+python vlm/setup_assets.py
 ```
 
 ## 🚀 Usage
-
+This project relies on the [Genesis](https://github.com/Genesis-Embodied-AI/Genesis) simulation framework, included included under the `Genesis/` directory.
 ### Demo Config for warehouse environment:
 ```
 python ./vlm/run.py --env_name warehouse --save_path ./outputs/exp --ckpt ./checkpoints/rl_model --n_drones 3 --llm_replan_interval 50 --model_name gpt-4o --min_safe_distance 0.3 --target_threshold 0.01 --show_viewer
