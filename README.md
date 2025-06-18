@@ -34,6 +34,8 @@ This advanced drone simulation environment integrates Vision Language Model (VLM
 python vlm/setup_assets.py
 ```
 
+[Optional] To enable ray tracing with option `enable_ray_tracing`, follow [this link](https://genesis-world.readthedocs.io/en/latest/user_guide/getting_started/visualization.html#photo-realistic-ray-tracing-rendering) instructions to install `LuisaRender` module.
+
 ## 🚀 Usage
 This project relies on the [Genesis](https://github.com/Genesis-Embodied-AI/Genesis) simulation framework, included included under the `Genesis/` directory.
 ### Demo Config for warehouse environment:
