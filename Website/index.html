@@ -82,7 +82,7 @@
 
                 <span class="link-block">
                 <!-- TODO PDF Link. -->
-                <a target="_blank" href="assets/vima_paper.pdf"
+                <a target="_blank" href="assets/CS_275_S25_Drone.pdf"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -186,10 +186,11 @@ We propose the first hierarchical framework that places a large vision language 
         <div class="rows">
             <div class="rows is-centered ">
                 <div class="row is-full-width">
+                    <span style="font-size: 110%"><b>VLM-Guided Multi-Drone Coordination System</b> Our system architecture comprises four key components: (1) a multi-modal perception module, (2) a VLM-based planning engine with conversation history, (3) a hybrid control system supporting both reinforcement learning and classical PID controllers, and (4) a comprehensive logging and analysis framework.</span>
+
                     <img src="assets/images/VLMsystem.png" class="interpolation-image"
                          alt="" style="display: block; margin-left: auto; margin-right: auto"/>
                     <br>
-                    <span style="font-size: 110%"><b>VLM-Guided Multi-Drone Coordination System</b> Our system architecture comprises four key components: (1) a multi-modal perception module, (2) a VLM-based planning engine with conversation history, (3) a hybrid control system supporting both reinforcement learning and classical PID controllers, and (4) a comprehensive logging and analysis framework.</span>
                 </div>
             </div>
         </div>
@@ -198,10 +199,11 @@ We propose the first hierarchical framework that places a large vision language 
         <div class="rows">
             <div class="rows is-centered ">
                 <div class="row is-full-width">
+                    <span style="font-size: 110%"><b>VLM Implementation Details</b> </span>
                     <img src="assets/images/VLMarch.drawio.png" class="interpolation-image"
                          alt="" style="display: block; margin-left: auto; margin-right: auto"/>
                     <br>
-                    <span style="font-size: 110%"><b>VLM Implementation Details</b> </span>
+                    
                 </div>
             </div>
         </div>
@@ -258,7 +260,9 @@ We propose the first hierarchical framework that places a large vision language 
                             class="dvima">Conclusion</span></h2>
 
                     <p style="font-size: 125%">
-                        TODO
+                        This paper presents the first vision–language–control hierarchy that couples large vision–language models with learning-based and classical feedback controllers to achieve real-time, provably safe coordination of up to eight drones in both obstacle-free and cluttered warehouse environments.  The architecture attains a 15x speed-up over a strong mixed-integer planning baseline while preserving near-perfect task completion and collision avoidance.  Beyond point-to-point coordination, the same framework generalises to kilometre-scale shell-following missions with zero additional tuning, underscoring the benefit of language-conditioned global reasoning.
+
+Our results suggest that foundation models, when properly encapsulated in a variable-rate control stack with certified safety fallbacks, can unlock a new class of adaptive, interpretable, and computationally efficient swarm systems.  Future work will scale the method to heterogeneous fleets, integrate onboard perception for dynamic obstacle handling, and validate on physical hardware in live industrial inspection scenarios.
                     </p>
 
                 </div>
